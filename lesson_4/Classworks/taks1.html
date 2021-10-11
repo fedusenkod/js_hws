@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Forms Task 1</title>
+  <script>
+    /*
+      Задание:
+        Сделать валидацию формы:
+        1. Логин / Пароль не может быть пустым
+        2. Пароли должны совпадть
+        3. Пока не стоит что юзер согласен с лиц. соглашением - кнопка отправки не активна
+
+        + бонус - то поле, которое не прошло валидацию подсвечивать красным.
+                - которое прошло - подсвечивать зеленым.
+    */
+
+    
+
+
+  </script>
+</head>
+<body>
+  <form id="MyValidateForm">
+    <input class="form__input" type="text" name='login' placeholder="Ваш логин" />
+    <input class="form__input" type="password" name='pas1' placeholder="Ваш пароль" />
+    <input class="form__input" type="password" name='pas2' placeholder="Повторите пароль" />
+    <label for="agree">
+      <span>Вы согласны с лицензионым соглашением.</span>
+      <input type="checkbox" id="agree" />
+    </label>
+    <input type="submit" id="submit" value="Отправить" disabled/>
+  </form>
+
+  <style>
+    #MyValidateForm{
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #MyValidateForm input{
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      padding: 10px 20px;
+    }
+    .error{
+        border: 1px solid red;
+    }
+    .OK{
+        border: 1px solid green;
+    }
+  </style>
+  <script>
+
+    var mainForm = document.getElementById('MyValidateForm');
+    var input = document.querySelectorAll('.form__input');
+    var btnForm = document.getElementById('agree');
+    var btn = document.getElementById('submit');
+
+    function checkIfEmpty (input){
+      if (input.value.length === 0){
+        input.className = 'error';  
+      // return false;
+      } else {
+        input.className = 'OK'
+      } 
+      console.log(input);
+      console.log(input.value);
+    }
+    
+    function chechLi (){
+     if (btnForm.checked) {
+       document.getElementById('submit').removeAttribute('disabled')
+     } 
+    }
+
+    btnForm.addEventListener('click', chechLi);
+
+    function submitForm(event) {
+      event.preventDefault();
+      console.log('hello');
+      var loginInput = mainForm.login;
+      checkIfEmpty(loginInput);
+      checkIfEmpty(mainForm.pas1);
+      checkIfEmpty(mainForm.pas2);
+      checkIfPas(mainForm.pas1, mainForm.pas2);
+    }
+
+    function checkIfPas(pas1, pas2) {
+      if (pas1.value == pas2.value) {
+        pas1.className = 'OK'
+        pas2.className = 'OK'
+      }else {
+        pas1.className = 'error'
+        pas1.className = 'error'
+
+      } 
+    }
+
+
+    btn.addEventListener('click', submitForm); 
+
+    
+
+  </script>
+</body>
+</html>
