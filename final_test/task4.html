@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        Задание:
+
+            Написать при помощи async-await скрипт, который:
+
+            Получает список пользователей:  https://jsonplaceholder.typicode.com/users
+            Перебирает, выводит табличку:
+
+            # | userName | email           | Показать webiste   | phone  |
+            1.| userName | email@test.com  | button             | phone
+            2.| userName | email@test.com  | 20/10/2019         | phone
+            3.| userName | email@test.com  | button             | phone
+            4.| userName | email@test.com  | button             | phone
+
+            Данные о сайте скрывать при выводе и показывать при клике.
+     -->
+     <script>
+        let url = 'https://jsonplaceholder.typicode.com/users';
+    
+        fetch(url).then(res => {
+            return res.json()
+        }).then(res => {
+            console.log(res);
+            buildTable(res);
+        });
+    
+        function buildTable(rows) {
+            let table = document.createElement('table');
+            table.style.border = '1px solid #ccc';
+    
+            rows.forEach(row => {
+                let tableTR = document.createElement('tr');
+    
+                for (let td in row) {
+                    let tableTD = document.createElement('td');
+
+                    tableTD.innerText = row[td];
+    
+                    tableTR.appendChild(tableTD);
+                    table.appendChild(tableTR);
+                }
+            });
+    
+            document.body.appendChild(table);
+        }
+    
+    </script> 
+</body>
+</html>

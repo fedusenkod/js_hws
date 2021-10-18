@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Forms Task 1</title> 
+</head>
+<body>
+  <form id="MyValidateForm">
+    <input type="text" name='login' placeholder="Ваш логин" />
+    <input type="password" name='pas1' placeholder="Ваш пароль" />
+    <input type="password" name='pas2' placeholder="Повторите пароль" />
+    <label for="agree">
+      <span>Вы согласны с лицензионым соглашением.</span>
+      <input type="checkbox" id="agree" />
+    </label>
+    <input type="submit" id="submit" value="Отправить" disabled/>
+  </form>
+
+  <style>
+    #MyValidateForm{
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #MyValidateForm input{
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      padding: 10px 20px;
+    }
+    .error{
+        border: 1px solid red;
+    }
+    .OK{
+        border: 1px solid green;
+    }
+  </style>
+
+  <script>
+    /*
+      Задание:
+        Сделать валидацию формы:
+        1. Логин / Пароль не может быть пустым
+        2. то поле, которое не прошло валидацию подсвечивать красным, которое прошло - подсвечивать зеленым.
+        3. Пока не стоит что юзер согласен с лиц. соглашением - кнопка отправки не активна
+    */
+
+    var MyValidateForm = document.getElementById('MyValidateForm');
+    var login = document.querySelector('input[name="login"]');
+    var passMain = document.querySelector('input[name="pas1"]');
+    var passConfirm = document.querySelector('input[name="pas2"]');
+    var agree = document.getElementById('agree');
+
+    var submit = document.getElementById('submit');
+
+    var validBorder = 'OK';
+    var notValidBorder = 'error';
+
+    MyValidateForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      let isValidLogin = validateLogin(login.value);
+      let isValidPass = validateMainPwd(passMain.value);
+      let isValidSecondPass = validateConfirmedPwd(passMain.value, passConfirm.value);
+
+      if ( isValidLogin && isValidPass && isValidSecondPass ) {
+        alert('Form send');
+      }
+    })
+
+    function validateLogin(loginVal) {
+      if (loginVal.length > 3) {
+        login.classList = validBorder;
+        return true;
+      } else {
+        login.classList = notValidBorder;
+        return false;
+      }
+    }
+
+    function validateMainPwd(pwd, passField = passMain) {
+      console.log(pwd)
+      if (pwd > 3) {
+        passField.classList = validBorder;
+        return true;
+      } else {
+        passField.classList = notValidBorder;
+        return false;
+      }
+    }
+
+    function validateConfirmedPwd(pwdMain, pwdConfirm) {
+
+      let isValidSecondPass = validateMainPwd(pwdConfirm, passConfirm);
+
+      if (isValidSecondPass && pwdMain === pwdConfirm) {
+        passConfirm.classList = validBorder;
+        return true;
+      } else {
+        passConfirm.classList = notValidBorder;
+        return false;
+      }
+    }
+
+    agree.addEventListener('change', (e) => {
+      submit.disabled = !e.target.checked;
+    })
+
+  </script>
+
+</body>
+</html>
