@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Homework</title>
+    <style>
+      #clock {
+          width: 100px;
+          height: 100px;
+          margin: 15px 30px;
+          border: 1px solid gray;
+          border-radius: 50%;
+          position: relative;
+      }
+      .seconds {
+          background: red;
+          height: 45%;
+          left: 49.5%;
+          position: absolute;
+          top: 14%;
+          transform-origin: 50% 80%;
+          width: 1%;
+          z-index: 8;
+      }
+  </style>
+</head>
+<body>
+      <!--
+        Создайте счетчик секунд, который начинает отчет с 1 и заканчивается на 30,
+        также добавьте кнопки который останавливают отчет, и запускают его заново и добавьте кнопку обнуляющую отчет.
+        Также попробуйте изменить код так чтобы отчет начиналься с 30 и заканчивалься на 1.
+
+       + бонус: Сделать так что бы на каждый тик (1с/2c) менялся цвет фона. Можно на основе генератора случайного цвета с предудущих уроков.
+       + бонус: Сделать визуализацию стрелки которая идет по кругу
+            document.getElementById("myDIV").style.transform = "rotate(7deg)";
+
+       + бонус: Сделать кнопки которые выбирают режим в котором идет отсчет - обычный от 0 до 30 или реверсивный от 30 до 0
+      -->
+      
+      
+      <button id="start">Start</button>
+      <button id="pause">Pause</button>
+      <button id="stop">Stop</button>
+  </header>
+  <section>
+      <h2>Timer: <span id="time">0</span></h2>
+      <div class="clock_wrap">
+          <div id="clock">
+              <div class="seconds"></div>
+          </div>
+      </div>
+  </section>
+
+  <label for="timerSelectMode">Choose timer mode:</label>
+  <select name="timerSelectMode" id="timerSelectMode">
+      <option value="classic">Classic</option>
+      <option value="reverse">Reverse</option>
+
+      <script>
+        const start = document.getElementById('start'),
+        pause = document.getElementById('pause'),
+        stop = document.getElementById('stop'),
+        time = document.getElementById('time'),
+        clock = document.getElementById('clock'),
+        secondHand = document.querySelector('.seconds'),
+        selectMode = document.getElementById('timerSelectMode');
+
+        let seconds = 0,
+            intervalID,
+            timerMode = selectMode.value;
+
+        selectMode.addEventListener('change', () => {
+            timerMode = selectMode.value;
+            if (timerMode === 'classic') {
+                seconds = 0;
+            } else {
+                seconds = 30;
+            }
+            time.innerHTML = seconds;
+            secondHand.style.transform = `rotate( ${6 * seconds}deg)`;
+        });
+
+        function timerStart() {
+            selectMode.setAttribute('disabled', 'disabled');
+
+            intervalID = setInterval(() => {
+                if (seconds === 0 && timerMode === 'reverse') timerPause();
+                else if (seconds === 30 && timerMode === 'classic') timerPause();
+                else {
+                    timerMode === 'classic' ? seconds++ : seconds--;
+                    time.innerHTML = seconds;
+                    secondHand.style.transform = "rotate(" + seconds / 60 * 360 + "deg)";
+                    paintClock();
+                }
+            }, 1000);
+        }
+
+        function timerPause() {
+            clearInterval(intervalID);
+        }
+
+        function timerStop() {
+            clearInterval(intervalID);
+            intervalID = 0;
+            seconds = 30;
+            time.innerHTML = seconds;
+            secondHand.style.transform = "rotate(" + seconds / 60 * 360 + "deg)";
+
+            selectMode.removeAttribute('disabled');
+        }
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function paintClock() {
+            let r = getRandomIntInclusive(0, 255),
+                g = getRandomIntInclusive(0, 255),
+                b = getRandomIntInclusive(0, 255);
+
+            clock.style.background = `rgb(${r},${g},${b})`;
+        }
+
+        start.addEventListener('click', timerStart);
+        pause.addEventListener('click', timerPause);
+        stop.addEventListener('click', timerStop);
+      </script>
+</body>
+</html>
